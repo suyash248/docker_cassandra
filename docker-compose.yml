@@ -1,0 +1,82 @@
+version: '3'
+services:
+    DC1N1:
+        build: .
+        image: cass125
+        networks:
+            - cass125_network
+        volumes:
+            - ./n1data:/var/lib/cassandra
+        command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
+        environment:
+            - "CASSANDRA_CLUSTER_NAME=Cass125 Cluster"
+            - "CASSANDRA_DC=dc1"
+            - "CASSANDRA_SEEDS=DC1N1"
+            - "CASSANDRA_BROADCAST_ADDRESS=DC1N1"
+            - "CASSANDRA_LISTEN_ADDRESS=DC1N1"
+            - "CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch"
+        expose:
+            - 7000
+            - 7001
+            - 7199
+            - 9042
+            - 9160
+    DC1N2:
+        build: .
+        image: cass125
+        networks:
+            - cass125_network
+        volumes:
+            - ./n2data:/var/lib/cassandra
+        command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
+        environment:
+            - "CASSANDRA_CLUSTER_NAME=Cass125 Cluster"
+            - "CASSANDRA_DC=dc1"
+            - "CASSANDRA_SEEDS=DC1N1"
+            - "CASSANDRA_BROADCAST_ADDRESS=DC1N2"
+            - "CASSANDRA_LISTEN_ADDRESS=DC1N2"
+            - "CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch"
+        expose:
+            - 7000
+            - 7001
+            - 7199
+            - 9042
+            - 9160
+    DC1N3:
+        build: .
+        image: cass125
+        networks:
+            - cass125_network
+        volumes:
+            - ./n3data:/var/lib/cassandra
+        command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
+        environment:
+            - "CASSANDRA_CLUSTER_NAME=Cass125 Cluster"
+            - "CASSANDRA_DC=dc1"
+            - "CASSANDRA_SEEDS=DC1N1"
+            - "CASSANDRA_BROADCAST_ADDRESS=DC1N3"
+            - "CASSANDRA_LISTEN_ADDRESS=DC1N3"
+            - "CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch"
+        # depends_on:
+        #    - DC1N1
+        expose:
+            - 7000
+            - 7001
+            - 7199
+            - 9042
+            - 9160
+    # A web based interface for managing your docker containers.
+    portainer:
+        image: portainer/portainer
+        networks:
+            - cass125_network
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./portainer-data:/data
+        # Enable you to access potainers web interface from your host machine
+        # using http://localhost:10001
+        ports:
+            - "10001:9000"
+networks:
+    cass125_network:
+        driver: bridge
