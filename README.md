@@ -8,7 +8,7 @@ docker network create -d bridge test-network
 
 ```
 docker run --name cass125_1 --network cass125_network -e CASSANDRA_SEEDS=cass125_1 -e CASSANDRA_BROADCAST_ADDRESS=cass125_1 -e CASSANDRA_LISTEN_ADDRESS=cass125_1 -d suyash248/cassandra:1.2.5```
-
+```
 
 ## Configuring multi-nodes cluster
 
