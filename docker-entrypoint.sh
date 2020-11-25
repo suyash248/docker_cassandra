@@ -2,6 +2,7 @@
 
 CASSANDRA_CONF="/usr/lib/cassandra/conf"
 sed -r -i 's/(- seeds:).*/\1 "'"$CASSANDRA_SEEDS"'"/' $CASSANDRA_CONF/cassandra.yaml
+
 for yaml in \
 	broadcast_address \
 	broadcast_rpc_address \
